@@ -1,11 +1,11 @@
 ﻿# ATA - Arquitecto Técnico Artificial 🏗️🤖
 
-| 🏗️ Perfil & ConTech | 📈 Repositorio & Datos |
+| 🏗️ Perfil & ConTech | 📈 Repositorio & Enlaces |
 | :--- | :--- |
-| ![Profesión](https://img.shields.io/badge/Profesi%C3%B3n-Arquitectos%20T%C3%A9cnicos-2e7d32?logo=micro%3Abit&logoColor=white&style=plastic) <br> ![Role](https://img.shields.io/badge/Role-BIM%20%26%20ConTech-007ACC?logo=bim360&style=plastic) <br> ![Location](https://img.shields.io/badge/Location-A%20Coru%C3%B1a%20%F0%9F%8C%8A-005B94?logo=lighthouse&logoColor=white&style=plastic) <br> ![Sector](https://img.shields.io/badge/Sector-ConTech%20%7C%20AECO-E65100?logo=construct3&style=plastic) <br> ![Maker](https://img.shields.io/badge/Maker-Software-red?logo=makerbot&style=plastic) <br> ![Hardware](https://img.shields.io/badge/Hardware---grey?style=plastic) | [![Stars](https://img.shields.io/github/stars/jmcaamanog/ATA-Arquitecto_Tecnico_Artificial?style=plastic&label=Stars&color=f59e0b&logo=github)](https://github.com/jmcaamanog/ATA-Arquitecto_Tecnico_Artificial/stargazers) <br> ![Registros](https://img.shields.io/badge/Registros%20CEE-308.265-10b981?style=plastic&logo=databricks&logoColor=white) <br> ![Shards](https://img.shields.io/badge/Shards-100%20JSON-3b82f6?style=plastic&logo=json&logoColor=white) <br> [![Licencia Datos](https://img.shields.io/badge/Datos-CC%20BY--SA%204.0-8b5cf6?style=plastic&logo=creativecommons&logoColor=white)](https://creativecommons.org/licenses/by-sa/4.0/) <br> ![Actualización](https://img.shields.io/badge/Actualizaci%C3%B3n-Diaria%20%E2%80%A2%20GitHub%20Actions-06b6d4?style=plastic&logo=githubactions&logoColor=white) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=plastic&logo=linkedin)](https://www.linkedin.com/in/jmcaamanog/) |
+| ![Profesión](https://img.shields.io/badge/Profesi%C3%B3n-Arquitectos%20T%C3%A9cnicos-2e7d32?logo=micro%3Abit&logoColor=white&style=plastic) <br> ![Role](https://img.shields.io/badge/Role-BIM%20%26%20ConTech-007ACC?logo=bim360&style=plastic) <br> ![Location](https://img.shields.io/badge/Location-A%20Coru%C3%B1a%20%F0%9F%8C%8A-005B94?logo=lighthouse&logoColor=white&style=plastic) <br> ![Sector](https://img.shields.io/badge/Sector-ConTech%20%7C%20AECO-E65100?logo=construct3&style=plastic) <br> ![Maker](https://img.shields.io/badge/Maker-Software-red?logo=makerbot&style=plastic) <br> ![Hardware](https://img.shields.io/badge/Hardware---grey?style=plastic) | [![Stars](https://img.shields.io/github/stars/jmcaamanog/ATA-Arquitecto_Tecnico_Artificial?style=plastic&label=Stars&color=f59e0b&logo=github)](https://github.com/jmcaamanog/ATA-Arquitecto_Tecnico_Artificial/stargazers) <br> [![Asesor IA Web](https://img.shields.io/badge/Asesor%20IA-jmcaamanog.pages.dev-38bdf8?style=plastic&logo=googlebard&logoColor=white)](https://jmcaamanog.pages.dev/#ia) <br> ![Registros](https://img.shields.io/badge/Registros%20CEE-308.265-10b981?style=plastic&logo=databricks&logoColor=white) <br> ![Shards](https://img.shields.io/badge/Shards-100%20JSON-3b82f6?style=plastic&logo=json&logoColor=white) <br> [![Licencia Datos](https://img.shields.io/badge/Datos-CC%20BY--SA%204.0-8b5cf6?style=plastic&logo=creativecommons&logoColor=white)](https://creativecommons.org/licenses/by-sa/4.0/) <br> ![Actualización](https://img.shields.io/badge/Actualizaci%C3%B3n-Diaria%20%E2%80%A2%20GitHub%20Actions-06b6d4?style=plastic&logo=githubactions&logoColor=white) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=plastic&logo=linkedin)](https://www.linkedin.com/in/jmcaamanog/) |
 
-### Backend de datos para el **Asesor IA de Jose Manuel Caamaño González** — Col. 2.873 COATAC.
-*Dataset oficial del RGEEE (Galicia) transformado en 100 shards JSON para consulta ultrarrápida desde Cloudflare Workers sin límites de CPU.*
+### Motor de datos oficial y backend para el **Asesor IA de Jose Manuel Caamaño González** — Col. 2.873 COATAC.
+*Dataset oficial del RGEEE (Galicia) transformado en 100 shards JSON para consulta ultrarrápida en tiempo real desde Cloudflare Workers.*
 
 ---
 
@@ -13,22 +13,32 @@
 
 | 🌟 Recurso | 🚀 Acción / Enlace | 📝 Descripción |
 | :--- | :--- | :--- |
-| **Dataset en producción** | 👉 **[Ver GitHub Release](https://github.com/jmcaamanog/ATA-Arquitecto_Tecnico_Artificial/releases/tag/cee-data-latest)** | 101 shards JSON públicos (~97MB total) |
-| **Fuente oficial RGEEE** | 🏛️ **[Portal Abertos Xunta](https://abertos.xunta.gal/catalogo/economia-empresa-emprego/-/dataset/0432)** | Dataset CSV original de la Xunta de Galicia |
-| **INEGA Certificación** | ⚡ **[Consulta INEGA](https://www.inega.gal/es/eficiencia-energetica/certificacion-energetica-de-edificios)** | Portal oficial del registro RGEEE |
-| **Normativa RD 390/2021** | 📜 **[BOE A-2021-9176](https://www.boe.es/buscar/doc.php?id=BOE-A-2021-9176)** | Real Decreto de Certificación Energética |
+| **🤖 Asesor IA en Vivo** | 👉 **[Abrir Chat IA en jmcaamanog.pages.dev/#ia](https://jmcaamanog.pages.dev/#ia)** | **Consulta interactiva a pantalla completa**: introduce cualquier dirección o referencia catastral para obtener el Dossier 360º con CEE, Catastro y normativas en tiempo real. |
+| **Dataset en producción** | 📦 **[Ver GitHub Release](https://github.com/jmcaamanog/ATA-Arquitecto_Tecnico_Artificial/releases/tag/cee-data-latest)** | 101 shards JSON públicos (~97MB total) listos para consumo API sin límites. |
+| **Fuente oficial RGEEE** | 🏛️ **[Portal Abertos Xunta](https://abertos.xunta.gal/catalogo/economia-empresa-emprego/-/dataset/0432)** | Dataset CSV original del registro de la Xunta de Galicia. |
+| **INEGA Certificación** | ⚡ **[Consulta INEGA](https://www.inega.gal/es/eficiencia-energetica/certificacion-energetica-de-edificios)** | Portal oficial del registro autonómico RGEEE. |
+| **Normativa RD 390/2021** | 📜 **[BOE A-2021-9176](https://www.boe.es/buscar/doc.php?id=BOE-A-2021-9176)** | Real Decreto de Certificación de Eficiencia Energética. |
 
 ---
 
 > [!IMPORTANT]
-> ### 📥 Datos del RGEEE — Xunta de Galicia / INEGA
-> Este repositorio hospeda el dataset oficial del **Registro de Certificados de Eficiencia Energética de Edificios de Galicia (RGEEE)** procesado para su consulta eficiente:
-> - **~308.265** certificados energéticos registrados
-> - **~128.552** referencias catastrales únicas de Galicia
-> - **Licencia de los datos**: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) — Xunta de Galicia / INEGA
-> - **Licencia del código**: MIT — Jose Manuel Caamaño González
->
-> Los datos **se actualizan automáticamente cada día a las 03:00 UTC** mediante GitHub Actions. El tag `cee-data-latest` siempre apunta al dataset más reciente.
+> ### 🤖 ¿Quieres consultar el CEE de tu inmueble en tiempo real?
+> He integrado este dataset directamente en mi **Asesor de Inteligencia Artificial para la Edificación**.  
+> Puedes entrar en la web oficial y escribir cualquier dirección o referencia catastral:
+> 
+> 👉 **[Probar Asesor Virtual IA (jmcaamanog.pages.dev/#ia)](https://jmcaamanog.pages.dev/#ia)**
+> 
+> * **Certificado Energético (CEE)**: Comprueba número de expediente RGEEE, letra de consumo, emisiones y vigencia.
+> * **Datos Catastrales Oficiales**: Año de construcción, superficie total y desglose de usos.
+> * **Informe IEEG (Galicia)**: Evaluación según Decreto 61/2021 e información de registro en REGIAE.
+> * **Subvenciones & Ayudas**: Fondos NextGen, programas de rehabilitación del IGVS y desgravaciones IRPF.
+> * **Generación de Informe PDF & WhatsApp**: Exporta el dictamen técnico o contacta directamente con un clic.
+
+---
+
+### 👨‍💻 Autor & Arquitectura ConTech
+Desarrollado y mantenido por **José Manuel Caamaño González** ([LinkedIn](https://www.linkedin.com/in/jmcaamanog/)), Arquitecto Técnico (Col. 2.873 COATAC) y ConTech Developer.
+*Creado bajo la filosofía de democratizar el acceso a los datos públicos del sector de la edificación en Galicia con herramientas libres, ultrarrápidas y sin dependencias pesadas.*
 
 ---
 
@@ -36,13 +46,14 @@
 
 | Módulo | Icono | Descripción |
 | :--- | :---: | :--- |
-| **ETL Automático** | ⚙️ | Script Node.js que descarga el CSV oficial del RGEEE (~65MB, ISO-8859-1), lo parsea y genera 100 shards JSON equilibrados |
-| **Sharding por RC14** | 🔀 | Hash djb2 determinista sobre la Referencia Catastral de 14 dígitos → asigna cada inmueble a un shard estable |
-| **GitHub Releases** | 📦 | Los 100 shards (~1MB/shard) se publican en el release `cee-data-latest`, accesibles públicamente sin autenticación |
-| **Cache Cloudflare** | ⚡ | El Worker descarga el shard una vez y lo cachea 24h en la Cache API de Cloudflare por datacenter |
-| **Paralelización** | 🚀 | Las consultas al RGEEE (CEE) y REGIAE (IEEG) se ejecutan en paralelo con `Promise.all` para minimizar la latencia |
-| **Tabla 3 Dinámica** | 📊 | El asistente IA muestra datos reales del RGEEE: expediente, calificación con emoji de color 🟢🟡🔴, vigencia y normativa |
-| **Actualización Diaria** | 🔄 | GitHub Actions descarga el CSV fresco del portal Abertos de la Xunta cada madrugada y publica un nuevo release |
+| **Chat IA en Tiempo Real** | 🤖 | Conexión directa con el Asesor Virtual en [jmcaamanog.pages.dev/#ia](https://jmcaamanog.pages.dev/#ia) para resolver dudas de edificación en segundos. |
+| **ETL Automático** | ⚙️ | Script Node.js que descarga el CSV oficial del RGEEE (~65MB, ISO-8859-1), lo parsea y genera 100 shards JSON equilibrados. |
+| **Sharding por RC14** | 🔀 | Hash djb2 determinista sobre la Referencia Catastral de 14 dígitos → asigna cada inmueble a un shard estable. |
+| **GitHub Releases** | 📦 | Los 100 shards (~1MB/shard) se publican en el release `cee-data-latest`, accesibles públicamente sin autenticación. |
+| **Cache Cloudflare** | ⚡ | El Worker descarga el shard una vez y lo cachea 24h en la Cache API de Cloudflare por datacenter (<5ms de latencia). |
+| **Paralelización** | 🚀 | Las consultas al RGEEE (CEE) y REGIAE (IEEG) se ejecutan en paralelo con `Promise.all`. |
+| **Dossier 360° Oficial** | 📊 | Tablas técnicas formateadas con expediente, letras de calificación 🟢🟡🔴, consumo kWh/m²·año y emisiones. |
+| **Actualización Diaria** | 🔄 | GitHub Actions descarga el CSV fresco de la Xunta cada madrugada (03:00 UTC) y publica un nuevo release. |
 
 ---
 
@@ -58,11 +69,10 @@ GitHub Action (03:00 UTC) → process-cee-shards.js
 GitHub Release: cee-data-latest (público · sin auth)
         ↓
 Cloudflare Worker (assistant.js)
-  └─ fetchCeeFromShards(rc14, ctx)
-       ├─ Cache API hit  → respuesta en <5ms
-       └─ Cache API miss → fetch shard (~1.2s) → cache 24h
+   ├─ fetchCeeFromShards(rc14, ctx) → Cache API hit (<5ms)
+   └─ Catastro OVC + REGIAE
         ↓
-Dossier 360° con datos CEE reales ✅
+Web jmcaamanog.pages.dev/#ia (Dossier 360° en Tiempo Real) ✅
 ```
 
 ### Algoritmo de sharding (Hash djb2)

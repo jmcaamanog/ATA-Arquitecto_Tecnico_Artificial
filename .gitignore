@@ -1,0 +1,7 @@
+NOTAS/
+node_modules/
+*.csv
+shards/
+.env
+.env.local
+dist/

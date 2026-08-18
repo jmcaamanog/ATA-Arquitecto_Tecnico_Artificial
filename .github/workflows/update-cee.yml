@@ -1,0 +1,117 @@
+﻿name: 🔋 Actualizar Dataset CEE RGEEE (Xunta de Galicia / INEGA)
+
+# Ejecucion diaria a las 03:00 UTC (05:00 hora Espana peninsular)
+# El dataset oficial se actualiza diariamente segun la Xunta de Galicia
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:   # Permite ejecucion manual desde GitHub Actions
+
+jobs:
+  update-cee-data:
+    name: Descargar RGEEE y generar shards
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write   # Necesario para crear/actualizar el GitHub Release
+
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Descargar dataset CSV oficial (RGEEE - Xunta de Galicia)
+        run: |
+          mkdir -p data
+          echo "📥 Descargando CSV desde abertos.xunta.gal..."
+          curl -L --retry 3 --retry-delay 5 --max-time 300 \
+            "https://abertos.xunta.gal/catalogo/economia-empresa-emprego/-/dataset/0432/rexistro-certificados-eficiencia-enerxetica/001/acceso-aos-datos.csv" \
+            -o data/rgeee.csv
+          SIZE=$(stat -c%s "data/rgeee.csv" 2>/dev/null || stat -f%z "data/rgeee.csv")
+          LINES=$(wc -l < data/rgeee.csv)
+          echo "✅ CSV descargado: $SIZE bytes, $LINES lineas"
+          echo "CSV_SIZE=$SIZE" >> $GITHUB_ENV
+          echo "CSV_LINES=$LINES" >> $GITHUB_ENV
+
+      - name: Calcular checksum SHA-256 del CSV
+        id: checksum
+        run: |
+          SHA=$(sha256sum data/rgeee.csv | cut -d' ' -f1)
+          echo "CSV_SHA=$SHA" >> $GITHUB_ENV
+          echo "SHA256: $SHA"
+          
+          # Verificar si es el mismo que el ultimo release (evitar subida innecesaria)
+          LAST_SHA=""
+          if gh release view cee-data-latest --json body -q '.body' 2>/dev/null | grep -q "SHA256:"; then
+            LAST_SHA=$(gh release view cee-data-latest --json body -q '.body' | grep "SHA256:" | sed 's/.*SHA256: //')
+          fi
+          
+          if [ "$SHA" = "$LAST_SHA" ]; then
+            echo "SKIP_UPDATE=true" >> $GITHUB_ENV
+            echo "ℹ️ Dataset sin cambios (mismo checksum). Saltando actualizacion."
+          else
+            echo "SKIP_UPDATE=false" >> $GITHUB_ENV
+            echo "🔄 Dataset actualizado. Procesando..."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generar 100 shards JSON
+        if: env.SKIP_UPDATE == 'false'
+        run: |
+          echo "⚙️ Procesando CSV en $NUM_SHARDS shards..."
+          node scripts/process-cee-shards.js data/rgeee.csv shards/
+          echo "✅ Shards generados:"
+          ls shards/ | head -5
+          echo "..."
+          cat shards/metadata.json
+
+      - name: Eliminar release anterior (si existe)
+        if: env.SKIP_UPDATE == 'false'
+        run: |
+          gh release delete cee-data-latest --yes 2>/dev/null || true
+          echo "🗑️ Release anterior eliminado (o no existia)"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Crear nuevo release con los shards
+        if: env.SKIP_UPDATE == 'false'
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          RECORDS=$(node -e "const m=require('./shards/metadata.json'); console.log(m.total_records)")
+          RC14=$(node -e "const m=require('./shards/metadata.json'); console.log(m.total_rc14_unique)")
+          SIZE=$(node -e "const m=require('./shards/metadata.json'); console.log(m.total_size_mb)")
+          
+          gh release create cee-data-latest \
+            shards/*.json \
+            --title "CEE RGEEE Data - ${DATE}" \
+            --notes "## 🔋 Datos RGEEE Galicia — Actualizado ${DATE}
+          
+          | Campo | Valor |
+          |:------|:------|
+          | **Fuente** | RGEEE · Xunta de Galicia / INEGA |
+          | **Licencia** | CC BY-SA 4.0 |
+          | **Registros totales** | ${RECORDS} CEE |
+          | **RC14 unicas** | ${RC14} |
+          | **Shards** | 100 archivos JSON |
+          | **Tamaño total** | ${SIZE} MB |
+          | **SHA256 CSV** | ${{ env.CSV_SHA }} |
+          
+          > Datos de certificados de eficiencia energetica (CEE) de Galicia.
+          > Actualizacion automatica diaria desde el portal de datos abiertos de la Xunta.
+          > [Portal Abertos Xunta](https://abertos.xunta.gal/catalogo/economia-empresa-emprego/-/dataset/0432)" \
+            --prerelease
+          
+          echo "🚀 Release cee-data-latest creado exitosamente"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Limpiar datos temporales
+        if: always()
+        run: |
+          rm -rf data/ shards/
+          echo "🧹 Limpieza completada"

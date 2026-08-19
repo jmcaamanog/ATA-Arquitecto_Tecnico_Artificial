@@ -22,17 +22,28 @@
 ---
 
 > [!IMPORTANT]
-> ### 🤖 ¿Quieres consultar el CEE de tu inmueble en tiempo real?
-> He integrado este dataset directamente en mi **Asesor de Inteligencia Artificial para la Edificación**.  
-> Puedes entrar en la web oficial y escribir cualquier dirección o referencia catastral:
-> 
-> 👉 **[Probar Asesor Virtual IA (jmcaamanog.pages.dev/#ia)](https://jmcaamanog.pages.dev/#ia)**
-> 
-> * **Certificado Energético (CEE)**: Comprueba número de expediente RGEEE, letra de consumo, emisiones y vigencia.
-> * **Datos Catastrales Oficiales**: Año de construcción, superficie total y desglose de usos.
-> * **Informe IEEG (Galicia)**: Evaluación según Decreto 61/2021 e información de registro en REGIAE.
-> * **Subvenciones & Ayudas**: Fondos NextGen, programas de rehabilitación del IGVS y desgravaciones IRPF.
-> * **Generación de Informe PDF & WhatsApp**: Exporta el dictamen técnico o contacta directamente con un clic.
+> <table border="0" style="border:none; background:transparent;">
+>   <tr>
+>     <td width="90" align="center" valign="top" style="border:none;">
+>       <a href="https://jmcaamanog.pages.dev/#ia">
+>         <img src="https://raw.githubusercontent.com/jmcaamanog/ATA-Arquitecto_Tecnico_Artificial/master/img/jmcaamanog.png" width="80" height="80" alt="Jose Manuel Caamaño - Asesor IA" style="border-radius:50%; border: 3px solid #06b6d4;" />
+>       </a>
+>     </td>
+>     <td style="border:none; padding-left: 15px;">
+>       <h3>🤖 ¡Hola! Soy Jose Manuel Caamaño (@jmcaamanog)</h3>
+>       <p>¿Quieres consultar el <b>CEE oficial</b> y el <b>Dossier 360º</b> de tu inmueble en tiempo real?<br>
+>       He integrado este dataset oficial del RGEEE directamente en mi <b>Asesor de Inteligencia Artificial para la Edificación</b>.<br>
+>       Solo tienes que entrar y escribir tu dirección o referencia catastral:</p>
+>       <p>👉 <b><a href="https://jmcaamanog.pages.dev/#ia">🚀 Abrir Asesor Virtual IA en Vivo (jmcaamanog.pages.dev/#ia)</a></b></p>
+>     </td>
+>   </tr>
+> </table>
+>
+> * **⚡ Certificado Energético (CEE)**: Comprueba número de expediente RGEEE, letra de consumo (A–G), emisiones y vigencia.
+> * **🏛️ Datos Catastrales Oficiales**: Año de construcción, superficie construida total y desglose de usos.
+> * **⚖️ Informe IEEG (Galicia)**: Evaluación según Decreto 61/2021 e información de inscripción en REGIAE.
+> * **🌿 Subvenciones & Ayudas**: Fondos NextGen, programas de rehabilitación del IGVS y desgravaciones en IRPF.
+> * **📄 Generación de Informe PDF & WhatsApp**: Exporta el dictamen técnico visable o contacta conmigo directamente con un clic.
 
 ---
 

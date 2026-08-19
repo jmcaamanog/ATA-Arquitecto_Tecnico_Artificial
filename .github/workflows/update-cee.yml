@@ -1,10 +1,9 @@
 ﻿name: 🔋 Actualizar Dataset CEE RGEEE (Xunta de Galicia / INEGA)
 
-# Ejecucion diaria a las 03:00 UTC (05:00 hora Espana peninsular)
-# El dataset oficial se actualiza diariamente segun la Xunta de Galicia
+# Ejecucion mensual: Dia 1 de cada mes a las 07:00 UTC (09:00 hora Espana peninsular)
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 7 1 * *'
   workflow_dispatch:   # Permite ejecucion manual desde GitHub Actions
 
 jobs:
@@ -13,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
-      contents: write   # Necesario para crear/actualizar el GitHub Release
+      contents: write   # Para crear/actualizar GitHub Release
+      issues: write     # Para crear/cerrar Issue de recordatorio mensual
 
     steps:
       - name: Checkout repositorio
@@ -24,11 +24,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Descargar dataset CSV oficial (RGEEE - Xunta de Galicia)
+      - name: Intentar descarga automatica del CSV oficial (RGEEE - Xunta de Galicia)
         id: download_csv
         run: |
           mkdir -p data
-          echo "📥 Intentando descargar CSV oficial desde abertos.xunta.gal..."
+          echo "📥 Intentando descarga automatica desde abertos.xunta.gal..."
           curl -L --retry 3 --retry-delay 5 --max-time 300 \
             "https://abertos.xunta.gal/catalogo/economia-empresa-emprego/-/dataset/0432/rexistro-certificados-eficiencia-enerxetica/001/acceso-aos-datos.csv" \
             -o data/rgeee.csv || true
@@ -37,13 +37,12 @@ jobs:
           if [ -f data/rgeee.csv ] && head -n 5 data/rgeee.csv | grep -q -i "numSol;\|numeroRegistro;\|tipoCEE;"; then
             SIZE=$(stat -c%s "data/rgeee.csv" 2>/dev/null || stat -f%z "data/rgeee.csv")
             LINES=$(wc -l < data/rgeee.csv)
-            echo "✅ CSV valido descargado: $SIZE bytes, $LINES lineas"
+            echo "✅ Descarga automatica exitosa: $SIZE bytes, $LINES lineas"
             echo "CSV_VALID=true" >> $GITHUB_ENV
             echo "CSV_SIZE=$SIZE" >> $GITHUB_ENV
             echo "CSV_LINES=$LINES" >> $GITHUB_ENV
           else
-            echo "⚠️ El portal INEGA/Abertos requiere validacion interactiva (reCAPTCHA) para descargas masivas."
-            echo "ℹ️ Se conserva intacto el dataset y release actual sin interrumpir el servicio."
+            echo "ℹ️ El portal INEGA/Abertos requiere validacion humana (reCAPTCHA)."
             echo "CSV_VALID=false" >> $GITHUB_ENV
             echo "SKIP_UPDATE=true" >> $GITHUB_ENV
           fi
@@ -56,7 +55,6 @@ jobs:
           echo "CSV_SHA=$SHA" >> $GITHUB_ENV
           echo "SHA256: $SHA"
           
-          # Verificar si es el mismo que el ultimo release (evitar subida innecesaria)
           LAST_SHA=""
           if gh release view cee-data-latest --json body -q '.body' 2>/dev/null | grep -q "SHA256:"; then
             LAST_SHA=$(gh release view cee-data-latest --json body -q '.body' | grep "SHA256:" | sed 's/.*SHA256: //')
@@ -64,10 +62,10 @@ jobs:
           
           if [ "$SHA" = "$LAST_SHA" ]; then
             echo "SKIP_UPDATE=true" >> $GITHUB_ENV
-            echo "ℹ️ Dataset sin cambios (mismo checksum). Saltando actualizacion."
+            echo "ℹ️ Dataset sin cambios. Saltando actualizacion."
           else
             echo "SKIP_UPDATE=false" >> $GITHUB_ENV
-            echo "🔄 Dataset actualizado. Procesando..."
+            echo "🔄 Dataset actualizado. Procesando shards..."
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -77,16 +75,13 @@ jobs:
         run: |
           echo "⚙️ Procesando CSV en 100 shards..."
           node scripts/process-cee-shards.js data/rgeee.csv shards/
-          echo "✅ Shards generados:"
-          ls shards/ | head -5
-          echo "..."
-          cat shards/metadata.json
+          echo "✅ Shards generados exitosamente"
 
       - name: Eliminar release anterior (si existe)
         if: env.SKIP_UPDATE == 'false'
         run: |
           gh release delete cee-data-latest --yes 2>/dev/null || true
-          echo "🗑️ Release anterior eliminado (o no existia)"
+          echo "🗑️ Release anterior eliminado"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -113,12 +108,59 @@ jobs:
           | **Tamaño total** | ${SIZE} MB |
           | **SHA256 CSV** | ${{ env.CSV_SHA }} |
           
-          > Datos de certificados de eficiencia energetica (CEE) de Galicia.
-          > Actualizacion automatica diaria desde el portal de datos abiertos de la Xunta.
+          > Datos oficiales de certificados de eficiencia energetica de Galicia.
           > [Portal Abertos Xunta](https://abertos.xunta.gal/catalogo/economia-empresa-emprego/-/dataset/0432)" \
             --prerelease
           
-          echo "🚀 Release cee-data-latest creado exitosamente"
+          echo "🚀 Release cee-data-latest actualizado"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cerrar recordatorios previos si la actualizacion automatica fue exitosa
+        if: env.SKIP_UPDATE == 'false'
+        run: |
+          OPEN_ISSUES=$(gh issue list --label "recordatorio-cee" --state open --json number -q '.[].number')
+          for ISSUE in $OPEN_ISSUES; do
+            gh issue close "$ISSUE" --comment "✅ Actualizacion automatica de CEE completada con exito."
+            echo "Cerrado issue #$ISSUE"
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enviar recordatorio mensual a correo si se requiere descarga manual
+        if: env.CSV_VALID == 'false'
+        run: |
+          MES=$(date +'%B %Y')
+          TITLE="🔋 Recordatorio Mensual: Actualizar Censo CEE Galicia (RGEEE) — ${MES}"
+          
+          # Verificar si ya existe un issue abierto para evitar duplicados
+          EXISTING=$(gh issue list --label "recordatorio-cee" --state open --json title -q '.[].title' | grep -i "Recordatorio Mensual" || true)
+          
+          if [ -z "$EXISTING" ]; then
+            gh issue create \
+              --title "$TITLE" \
+              --body "## 🔋 Recordatorio Mensual de Actualización CEE (INEGA / Xunta de Galicia)
+
+Hola Jose Manuel,
+
+El sistema ha verificado el portal de datos abiertos de la Xunta de Galicia. Al requerir resolución de reCAPTCHA en el navegador para la descarga del censo oficial, puedes actualizarlo en **menos de 30 segundos** con estos sencillos pasos:
+
+### 📥 Pasos para actualizar (1 Clic):
+1. Abre este enlace oficial en tu navegador:
+   🔗 [Descargar CSV RGEEE (Abertos Xunta)](https://abertos.xunta.gal/catalogo/economia-empresa-emprego/-/dataset/0432/rexistro-certificados-eficiencia-enerxetica/001/acceso-aos-datos.csv)
+2. Resuelve el reCAPTCHA y guarda el archivo CSV descargado en tu carpeta de **Descargas**.
+3. En tu equipo, haz doble clic sobre el archivo **`actualizar_cee.bat`** (en la raíz del proyecto).
+4. El script procesará automáticamente los 100 shards, actualizará la web y cerrará este recordatorio.
+
+---
+*Este recordatorio se genera automáticamente el día 1 de cada mes a las 09:00.*" \
+              --label "recordatorio-cee,mantenimiento" \
+              --assignee "jmcaamanog"
+            
+            echo "📧 Recordatorio mensual creado exitosamente (notificación enviada por correo a jmcaamanog)"
+          else
+            echo "ℹ️ Ya existe un recordatorio abierto para este ciclo."
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

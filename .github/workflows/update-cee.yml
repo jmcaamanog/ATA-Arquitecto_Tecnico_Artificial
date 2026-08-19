@@ -25,19 +25,31 @@ jobs:
           node-version: '20'
 
       - name: Descargar dataset CSV oficial (RGEEE - Xunta de Galicia)
+        id: download_csv
         run: |
           mkdir -p data
-          echo "📥 Descargando CSV desde abertos.xunta.gal..."
+          echo "📥 Intentando descargar CSV oficial desde abertos.xunta.gal..."
           curl -L --retry 3 --retry-delay 5 --max-time 300 \
             "https://abertos.xunta.gal/catalogo/economia-empresa-emprego/-/dataset/0432/rexistro-certificados-eficiencia-enerxetica/001/acceso-aos-datos.csv" \
-            -o data/rgeee.csv
-          SIZE=$(stat -c%s "data/rgeee.csv" 2>/dev/null || stat -f%z "data/rgeee.csv")
-          LINES=$(wc -l < data/rgeee.csv)
-          echo "✅ CSV descargado: $SIZE bytes, $LINES lineas"
-          echo "CSV_SIZE=$SIZE" >> $GITHUB_ENV
-          echo "CSV_LINES=$LINES" >> $GITHUB_ENV
+            -o data/rgeee.csv || true
+          
+          # Validar si el archivo descargado es un CSV real o una pagina HTML con reCAPTCHA
+          if [ -f data/rgeee.csv ] && head -n 5 data/rgeee.csv | grep -q -i "numSol;\|numeroRegistro;\|tipoCEE;"; then
+            SIZE=$(stat -c%s "data/rgeee.csv" 2>/dev/null || stat -f%z "data/rgeee.csv")
+            LINES=$(wc -l < data/rgeee.csv)
+            echo "✅ CSV valido descargado: $SIZE bytes, $LINES lineas"
+            echo "CSV_VALID=true" >> $GITHUB_ENV
+            echo "CSV_SIZE=$SIZE" >> $GITHUB_ENV
+            echo "CSV_LINES=$LINES" >> $GITHUB_ENV
+          else
+            echo "⚠️ El portal INEGA/Abertos requiere validacion interactiva (reCAPTCHA) para descargas masivas."
+            echo "ℹ️ Se conserva intacto el dataset y release actual sin interrumpir el servicio."
+            echo "CSV_VALID=false" >> $GITHUB_ENV
+            echo "SKIP_UPDATE=true" >> $GITHUB_ENV
+          fi
 
       - name: Calcular checksum SHA-256 del CSV
+        if: env.CSV_VALID == 'true'
         id: checksum
         run: |
           SHA=$(sha256sum data/rgeee.csv | cut -d' ' -f1)
@@ -63,7 +75,7 @@ jobs:
       - name: Generar 100 shards JSON
         if: env.SKIP_UPDATE == 'false'
         run: |
-          echo "⚙️ Procesando CSV en $NUM_SHARDS shards..."
+          echo "⚙️ Procesando CSV en 100 shards..."
           node scripts/process-cee-shards.js data/rgeee.csv shards/
           echo "✅ Shards generados:"
           ls shards/ | head -5
